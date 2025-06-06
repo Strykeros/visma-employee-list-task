@@ -32,6 +32,10 @@ const displayEmployees = () => {
             tr.classList.add("employee-row");
             tbody.appendChild(tr);
 
+            let hr = document.createElement("hr");
+            hr.classList.add("table-line");
+            tbody.appendChild(hr);
+
             let tdName = document.createElement('td');
             tdName.classList.add("employee-cell");
             tdName.textContent = employee.name();
