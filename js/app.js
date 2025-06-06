@@ -29,20 +29,50 @@ const displayEmployees = () => {
         const tbody = document.querySelector('.table-body');
         employees.forEach(employee => {
             let tr = document.createElement("tr");
-            tr.classList.add("table-row");
+            tr.classList.add("employee-row");
             tbody.appendChild(tr);
 
             let tdName = document.createElement('td');
-            tdName.classList.add("td-name");
+            tdName.classList.add("employee-cell");
             tdName.textContent = employee.name();
             tr.appendChild(tdName);
 
             let tdJob = document.createElement('td');
-            tdJob.classList.add("td-job");
+            tdJob.classList.add("employee-cell");
             tdJob.textContent = employee.title();
             tr.appendChild(tdJob);
         });
   });
 }
 
+const initSearch = () => {
+    let searchBox = document.querySelector("#searchBox");    
+    let cellTxt;
+    let employeeRow = document.getElementsByClassName("employee-row");
+    let searchInput = searchBox.value.toUpperCase();
+
+    for(let i = 0; i < employeeRow.length; i++){
+        let employeeCol = employeeRow[i].getElementsByClassName("employee-cell")[0];
+        if(employeeCol !== null){            
+            cellTxt = employeeCol.innerText;
+            if(cellTxt.toUpperCase().indexOf(searchInput) > -1){
+                employeeRow[i].classList.remove("hide-row");
+            }
+            else{
+                employeeRow[i].classList.add("hide-row");
+            }
+        }
+    }
+}
+
+const initSearchEvent = () => {
+    let searchBox = document.querySelector("#searchBox");   
+
+    searchBox.addEventListener("keyup", function (e) {
+        initSearch();
+    })
+}
+
+
 displayEmployees();
+initSearchEvent();
