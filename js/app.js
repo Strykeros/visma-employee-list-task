@@ -1,35 +1,49 @@
+const body = document.querySelector("body");
+
 
 const getEmployees = () => {
-  const employees = [];       
+    const employees = [];
 
-    return fetch('employees.json') 
-    .then(response => response.json())
-    .then(data => {            
-      data.forEach(employee => {       
-        employees.push(
-          new Employee(employee.id, employee.name, employee.title, employee.email, employee.startDate)
-        );
-      });
-      return employees;
-    });
+    return fetch('employees.json')
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(employee => {
+                employees.push(
+                    new Employee(employee.id, employee.name, employee.title, employee.email, employee.startDate)
+                );
+            });
+            return employees;
+        });
 };
 
 const displayEmployees = () => {
     const titles = ["Name", "Job title"]
     const employeeList = getEmployees();
     const theader = document.querySelector('.table-header');
+    let modalId = 1;
 
     for (let i = 0; i < titles.length; i++) {
         let th = document.createElement("th");
+        th.classList.add("employee-header");
         th.innerText = titles[i];
         theader.appendChild(th);
     }
 
     employeeList.then(employees => {
         const tbody = document.querySelector('.table-body');
+
         employees.forEach(employee => {
+            const imgDir = "../img/person.png";
+            initModal(modalId);            
+            addModalContent(modalId, employee.name(), imgDir, employee.email(), employee.startDate());
+            let currentModal = document.querySelector("#modal" + modalId);
+
             let tr = document.createElement("tr");
             tr.classList.add("employee-row");
+            tr.addEventListener("click", function (e) {
+                currentModal.classList.remove("hide-modal");
+                currentModal.classList.add("show-modal");
+            })
             tbody.appendChild(tr);
 
             let tdName = document.createElement('td');
@@ -41,24 +55,26 @@ const displayEmployees = () => {
             tdJob.classList.add("employee-cell");
             tdJob.textContent = employee.title();
             tr.appendChild(tdJob);
+
+            modalId++;
         });
-  });
+    });
 }
 
 const initSearch = () => {
-    let searchBox = document.querySelector("#searchBox");    
+    let searchBox = document.querySelector("#searchBox");
     let cellTxt;
     let employeeRow = document.getElementsByClassName("employee-row");
     let searchInput = searchBox.value.toUpperCase();
 
-    for(let i = 0; i < employeeRow.length; i++){
+    for (let i = 0; i < employeeRow.length; i++) {
         let employeeCol = employeeRow[i].getElementsByClassName("employee-cell")[0];
-        if(employeeCol !== null){            
+        if (employeeCol !== null) {
             cellTxt = employeeCol.innerText;
-            if(cellTxt.toUpperCase().indexOf(searchInput) > -1){
+            if (cellTxt.toUpperCase().indexOf(searchInput) > -1) {
                 employeeRow[i].classList.remove("hide-row");
             }
-            else{
+            else {
                 employeeRow[i].classList.add("hide-row");
             }
         }
@@ -66,13 +82,94 @@ const initSearch = () => {
 }
 
 const initSearchEvent = () => {
-    let searchBox = document.querySelector("#searchBox");   
+    let searchBox = document.querySelector("#searchBox");
 
     searchBox.addEventListener("keyup", function (e) {
         initSearch();
     })
 }
 
+const initModal = (modalId) => {
+    let modal = document.createElement("div");
+    modal.classList.add("modal");
+    modal.id = "modal" + modalId;
+    body.appendChild(modal);
+
+    let modalContent = document.createElement("div");
+    modalContent.classList.add("modal-content");
+    modal.appendChild(modalContent);
+
+    let closeBtn = document.createElement("span");
+    closeBtn.classList.add("close");
+    closeBtn.innerText = "x";
+    closeBtn.addEventListener("click", function (e) {
+        modal.classList.add("hide-modal");
+        modal.classList.remove("show-modal");
+        body.classList.remove("no-scroll");
+    })
+    modalContent.appendChild(closeBtn);
+
+    let modalBody = document.createElement("div");
+    modalBody.classList.add("modal-body");
+    modalContent.appendChild(modalBody);
+}
+
+const addModalContent = (modalId, employeeName, employeeImg, employeeEmail, employeeStartDate) => {
+    let currentModal = document.querySelector("#modal" + modalId);
+    let modalBody = currentModal.querySelector(".modal-body");
+    const employeeData = [employeeImg, employeeName, employeeEmail, employeeStartDate];
+    const employeeHeadingTxt = ["", "", "Email:", "Start date:"];
+
+    for (let i = 0; i < employeeData.length; i++) {
+        let contactWrap = document.createElement("div");
+        contactWrap.classList.add("modal-employee-wrap");
+        modalBody.appendChild(contactWrap);
+
+        if (i > 1){
+            initModalHeading(i, employeeHeadingTxt, contactWrap)
+        } 
+
+        if (i === 0){
+            initModalImg(contactWrap, employeeName, employeeImg);
+        }        
+        else{
+            initModalParagraph(i, employeeData, contactWrap)
+        }
+    }
+}
+
+const initModalHeading = (index, employeeHeadingTxt, parent) => {
+    let heading = document.createElement("h4");
+    heading.innerText = employeeHeadingTxt[index];
+    heading.classList.add("modal-heading");
+    parent.appendChild(heading);       
+}
+
+const initModalImg = (parent, employeeName, employeeImg) => {
+    let img = document.createElement("img");
+    img.classList.add("modal-employee-img")
+    img.alt = employeeName + "'s picture";
+    img.src = employeeImg;
+    parent.appendChild(img);
+}
+
+const initModalParagraph =  (index, employeeData, parent) => {
+    let paragraph = document.createElement("p");
+    paragraph.classList.add("modal-p");
+    paragraph.innerText = employeeData[index];
+    parent.appendChild(paragraph);
+}
+
+window.addEventListener("click", function (e) {
+    let modals = document.querySelectorAll(".modal");
+
+    for (let i = 0; i < modals.length; i++) {
+        if (e.target === modals[i]) {
+            modals[i].classList.add("hide-modal");
+            modals[i].classList.remove("show-modal");
+        }
+    }
+})
 
 displayEmployees();
 initSearchEvent();
