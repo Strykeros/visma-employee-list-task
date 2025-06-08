@@ -1,3 +1,5 @@
+const body = document.querySelector("body");
+
 
 const getEmployees = () => {
     const employees = [];
@@ -31,8 +33,9 @@ const displayEmployees = () => {
         const tbody = document.querySelector('.table-body');
 
         employees.forEach(employee => {
-            initModal(modalId);
-            addModalContent(modalId, employee.name(), employee.email(), employee.startDate());
+            const imgDir = "../img/person.png";
+            initModal(modalId);            
+            addModalContent(modalId, employee.name(), imgDir, employee.email(), employee.startDate());
             let currentModal = document.querySelector("#modal" + modalId);
 
             let tr = document.createElement("tr");
@@ -87,7 +90,6 @@ const initSearchEvent = () => {
 }
 
 const initModal = (modalId) => {
-    const body = document.querySelector("body");
     let modal = document.createElement("div");
     modal.classList.add("modal");
     modal.id = "modal" + modalId;
@@ -103,6 +105,7 @@ const initModal = (modalId) => {
     closeBtn.addEventListener("click", function (e) {
         modal.classList.add("hide-modal");
         modal.classList.remove("show-modal");
+        body.classList.remove("no-scroll");
     })
     modalContent.appendChild(closeBtn);
 
@@ -111,29 +114,50 @@ const initModal = (modalId) => {
     modalContent.appendChild(modalBody);
 }
 
-const addModalContent = (modalId, employeeName, employeeEmail, employeeStartDate) => {
+const addModalContent = (modalId, employeeName, employeeImg, employeeEmail, employeeStartDate) => {
     let currentModal = document.querySelector("#modal" + modalId);
     let modalBody = currentModal.querySelector(".modal-body");
-    const employeeData = [employeeName, employeeEmail, employeeStartDate];
-        const employeeHeadingTxt = ["", "Email:", "Start date:"];
+    const employeeData = [employeeImg, employeeName, employeeEmail, employeeStartDate];
+    const employeeHeadingTxt = ["", "", "Email:", "Start date:"];
 
     for (let i = 0; i < employeeData.length; i++) {
         let contactWrap = document.createElement("div");
         contactWrap.classList.add("modal-employee-wrap");
         modalBody.appendChild(contactWrap);
 
-        if (i > 0){
-            let heading = document.createElement("h4");
-            heading.innerText = employeeHeadingTxt[i];
-            heading.classList.add("modal-heading");
-            contactWrap.appendChild(heading);
-        }
+        if (i > 1){
+            initModalHeading(i, employeeHeadingTxt, contactWrap)
+        } 
 
-        let paragraph = document.createElement("p");
-        paragraph.classList.add("modal-p");
-        paragraph.innerText = employeeData[i];
-        contactWrap.appendChild(paragraph);
+        if (i === 0){
+            initModalImg(contactWrap, employeeName, employeeImg);
+        }        
+        else{
+            initModalParagraph(i, employeeData, contactWrap)
+        }
     }
+}
+
+const initModalHeading = (index, employeeHeadingTxt, parent) => {
+    let heading = document.createElement("h4");
+    heading.innerText = employeeHeadingTxt[index];
+    heading.classList.add("modal-heading");
+    parent.appendChild(heading);       
+}
+
+const initModalImg = (parent, employeeName, employeeImg) => {
+    let img = document.createElement("img");
+    img.classList.add("modal-employee-img")
+    img.alt = employeeName + "'s picture";
+    img.src = employeeImg;
+    parent.appendChild(img);
+}
+
+const initModalParagraph =  (index, employeeData, parent) => {
+    let paragraph = document.createElement("p");
+    paragraph.classList.add("modal-p");
+    paragraph.innerText = employeeData[index];
+    parent.appendChild(paragraph);
 }
 
 window.addEventListener("click", function (e) {
