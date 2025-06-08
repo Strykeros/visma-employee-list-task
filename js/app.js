@@ -149,7 +149,7 @@ const initSearch = () => {
 const initSearchEvent = () => {
     let searchBox = document.querySelector("#searchBox");
 
-    searchBox.addEventListener("keyup", function (e) {
+    searchBox.addEventListener("keyup", (e) => {
         initSearch();
     })
 }
@@ -168,7 +168,7 @@ const initModal = (modalId) => {
     let closeBtn = document.createElement("span");
     closeBtn.classList.add("close");
     closeBtn.innerText = "x";
-    closeBtn.addEventListener("click", function (e) {
+    closeBtn.addEventListener("click", (e) => {
         modal.classList.add("hide-modal");
         modal.classList.remove("show-modal");
         body.classList.remove("no-scroll");
@@ -231,7 +231,7 @@ const initModalParagraph = (index, employeeData, parent) => {
 }
 
 // adds event listener to close modal, if clicked outside of it
-window.addEventListener("click", function (e) {
+window.addEventListener("click", (e) => {
     let modals = document.querySelectorAll(".modal");
 
     for (let i = 0; i < modals.length; i++) {

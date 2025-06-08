@@ -1,5 +1,9 @@
 # Mini Employee List – Internship Homework
 
+## Creative feature
+
+The feature "company statistics" allows the HR manager to get a quick overview of the employees that are working in this company. It gets the data from the `employees.json` dataset and calculates the total number of employees working in the company, the newest employee that has been hired, and the median tenure across all the employees. This is very useful for HR manager, because at a quick glance it is possible to see the "actual" employee experience. With the specific technologies that the company uses, the new employee onboarding process can go smoother, and it can help prepare the reports for owner and investor meetings faster.
+
 ## Story
 
 You’ve just started an internship at **TinyTech**, a fast‑growing startup with twelve staff and zero admin tools. The HR manager keeps juggling spreadsheets and Post‑it notes to remember who does what. Your mission: deliver a **single‑page prototype** that anyone in the office can open in a browser to look up colleagues quickly. Nail this and you’ll earn serious bragging rights (and maybe an extended contract!).

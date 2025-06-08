@@ -116,6 +116,7 @@ body {
   overflow: auto;
   background-color: rgb(0, 0, 0);
   background-color: rgba(0, 0, 0, 0.4);
+  overflow: hidden;
 }
 
 .modal-content {
@@ -197,6 +198,10 @@ body {
 }
 
 @media (max-width: 1000px) {
+  .modal{
+    overflow: auto;
+  }
+
   .modal-content {
     width: 60%;
   }
