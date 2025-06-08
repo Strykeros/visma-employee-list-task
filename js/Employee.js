@@ -7,22 +7,26 @@ class Employee {
         this.employeeStartDate = inputStartDate;
     }
 
+    // returns employee id
     id(){
         return this.employeeId;
     }
-
+    // returns employee name
     name(){
         return this.employeeName;
     }    
     
+    // returns employee title
     title(){
         return this.employeeTitle;
     }
 
+    // returns employee email
     email(){
         return this.employeeEmail;
     }
 
+    // returns employee start date
     startDate(){
         return this.employeeStartDate;
     }
