@@ -1,6 +1,6 @@
 const body = document.querySelector("body");
 
-
+// gets employee data from json
 const getEmployees = () => {
     const employees = [];
 
@@ -16,6 +16,7 @@ const getEmployees = () => {
         });
 };
 
+// renders employee table and statistics
 const displayEmployees = () => {
     const titles = ["Name", "Job title"]
     const employeeList = getEmployees();
@@ -57,10 +58,73 @@ const displayEmployees = () => {
             tr.appendChild(tdJob);
 
             modalId++;
-        });
+        });   
+    });
+
+    displayEmployeeStats();
+}
+
+// displays employee statistics
+const displayEmployeeStats = () => {
+    const employeeList = getEmployees();
+    
+    employeeList.then(employees => {
+        const statistics = new EmployeeStats(employees);
+        employeeCount(statistics);
+        newEmployee(statistics);
+        medianTenure(statistics);
     });
 }
 
+// displays number of employees
+const employeeCount = (employees) => {
+    let employeeWrapper = document.querySelector(".employee-count-wrapper");
+
+    let employeeCount = document.createElement("h2");
+    employeeCount.classList.add("employees-count");
+    employeeCount.innerText = employees.totalEmployees();
+    employeeWrapper.appendChild(employeeCount);
+
+    let employeeCountTxt = document.createElement("p");
+    employeeCountTxt.classList.add("employees-count");
+    employeeCountTxt.innerText = "Total employees";
+    employeeWrapper.appendChild(employeeCountTxt);
+}
+
+// displays newest employee
+const newEmployee = (employees) => {
+    let employeeWrapper = document.querySelector(".newest-employee-wrapper");
+    let employeeMap = employees.newestEmployee();
+    let newestEmp = [...employeeMap.keys()][0];
+
+    let employeeCount = document.createElement("h2");
+    employeeCount.classList.add("employees-count");
+    employeeCount.innerText = newestEmp;
+    employeeWrapper.appendChild(employeeCount);
+
+    let employeeCountTxt = document.createElement("p");
+    employeeCountTxt.classList.add("employees-count");
+    employeeCountTxt.innerText = "Newest employee";
+    employeeWrapper.appendChild(employeeCountTxt);
+}
+
+// displays all employee median tenure
+const medianTenure = (employees) => {
+    let tenureWrapper = document.querySelector(".employee-tenure-wrapper");
+    let medianTenure = employees.medianTeamTenure();
+
+    let employeeCount = document.createElement("h2");
+    employeeCount.classList.add("employees-count");
+    employeeCount.innerText = medianTenure + " days";
+    tenureWrapper.appendChild(employeeCount);
+
+    let employeeCountTxt = document.createElement("p");
+    employeeCountTxt.classList.add("employees-count");
+    employeeCountTxt.innerText = "Median tenure";
+    tenureWrapper.appendChild(employeeCountTxt);
+}
+
+// initializes search functionality
 const initSearch = () => {
     let searchBox = document.querySelector("#searchBox");
     let cellTxt;
@@ -81,6 +145,7 @@ const initSearch = () => {
     }
 }
 
+// initializes search event
 const initSearchEvent = () => {
     let searchBox = document.querySelector("#searchBox");
 
@@ -89,6 +154,7 @@ const initSearchEvent = () => {
     })
 }
 
+// initializes employee modal
 const initModal = (modalId) => {
     let modal = document.createElement("div");
     modal.classList.add("modal");
@@ -114,6 +180,7 @@ const initModal = (modalId) => {
     modalContent.appendChild(modalBody);
 }
 
+// adds label heading
 const addModalContent = (modalId, employeeName, employeeImg, employeeEmail, employeeStartDate) => {
     let currentModal = document.querySelector("#modal" + modalId);
     let modalBody = currentModal.querySelector(".modal-body");
@@ -138,6 +205,7 @@ const addModalContent = (modalId, employeeName, employeeImg, employeeEmail, empl
     }
 }
 
+// adds heading in modal
 const initModalHeading = (index, employeeHeadingTxt, parent) => {
     let heading = document.createElement("h4");
     heading.innerText = employeeHeadingTxt[index];
@@ -145,6 +213,7 @@ const initModalHeading = (index, employeeHeadingTxt, parent) => {
     parent.appendChild(heading);       
 }
 
+// adds employee image
 const initModalImg = (parent, employeeName, employeeImg) => {
     let img = document.createElement("img");
     img.classList.add("modal-employee-img")
@@ -153,13 +222,15 @@ const initModalImg = (parent, employeeName, employeeImg) => {
     parent.appendChild(img);
 }
 
-const initModalParagraph =  (index, employeeData, parent) => {
+// adds information about employee
+const initModalParagraph = (index, employeeData, parent) => {
     let paragraph = document.createElement("p");
     paragraph.classList.add("modal-p");
     paragraph.innerText = employeeData[index];
     parent.appendChild(paragraph);
 }
 
+// adds event listener to close modal, if clicked outside of it
 window.addEventListener("click", function (e) {
     let modals = document.querySelectorAll(".modal");
 
