@@ -115,7 +115,7 @@ const medianTenure = (employees) => {
 
     let employeeCount = document.createElement("h2");
     employeeCount.classList.add("employees-count");
-    employeeCount.innerText = medianTenure + " days";
+    employeeCount.innerText = medianTenure + " months";
     tenureWrapper.appendChild(employeeCount);
 
     let employeeCountTxt = document.createElement("p");
